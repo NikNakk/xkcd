@@ -109,7 +109,7 @@ createdefaultmappinganddata <- function(mapping, data, mandatoryarguments =c("x"
   dataaes[, variablestocbind] <- data[,variablestocbind]
   ## Now, it creates a new mapping with the default variables x=x, y=x, yend=yend, and so on.
   ## See the definition of the function ggplot2::aes_string
-  parsed <- lapply(namesmapping, function(x) parse(text = x)[[1]])
+  parsed <- lapply(namesmapping, as.name)
   names(parsed) <- namesmapping
   newmapping <- structure(parsed, class = "uneval")
   list(mapping = newmapping, data = dataaes)
@@ -169,7 +169,7 @@ mappingjoin <- function(x,y) {
   nm1 <- names(x)
   nm2 <- names(y)
   for( i in intersect(nm1,nm2)) y[[i]] <- NULL
-  parsed <- lapply(c(x,y), function(x) parse(text = x)[[1]])
+  parsed <- lapply(c(x,y), as.name)
   structure(parsed, class = "uneval")
 }
 

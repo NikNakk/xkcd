@@ -103,7 +103,6 @@ xkcdline <- function(mapping, data, typexkcdline="segment", mask = TRUE, ...) {
     ## mapping <- mappingjoin(aes(x=x,y=y), mapping) # R CMD check gives NOTES
     mapping <- with(data, mappingjoin(aes(x=x,y=y), mapping))
     }
-
   
   listofpaths <- lapply(listofinterpolateswithillustrativedata,
                         function(x, mapping, mask, ...) {
@@ -117,7 +116,7 @@ xkcdline <- function(mapping, data, typexkcdline="segment", mask = TRUE, ...) {
                 
                             for(i in intersect(c("color","colour"), names(argList)))
                               argList[i] <- NULL
-                            argList$mapping <- mapping
+                            argList$mapping <- remove_xkcd_mappings(mapping)
                             argList$data <- x
                             argList$colour <- "white"
                             if(is.null(argList$size)==TRUE) argList$size <- 3
@@ -128,7 +127,7 @@ xkcdline <- function(mapping, data, typexkcdline="segment", mask = TRUE, ...) {
                             ##pathmask <- geom_path(mapping = mapping, data = x, colour="white",size=8)
                             }
                           c(pathmask,
-                            geom_path(mapping = mapping, data = x, ...))
+                            geom_path(mapping = remove_xkcd_mappings(mapping), data = x, ...))
                        },
                        mapping = mapping,
                        mask= mask 
@@ -138,3 +137,20 @@ xkcdline <- function(mapping, data, typexkcdline="segment", mask = TRUE, ...) {
   listofpaths  
 }
 
+remove_xkcd_mappings <- function(mapping) {
+  mapping <- mapping[!(names(mapping) %in% c("xbegin",
+                                             "xend",
+                                             "ybegin",
+                                             "yend",
+                                             "diameter",
+                                             "scale",
+                                             "ratioxy",
+                                             "angleofspine",
+                                             "anglerighthumerus",
+                                             "anglelefthumerus",
+                                             "anglerightradius",
+                                             "angleleftradius",
+                                             "anglerightleg",
+                                             "angleleftleg",                            
+                                             "angleofneck"))]
+}
